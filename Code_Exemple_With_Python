@@ -1,0 +1,15 @@
+GNU nano 4.8 gbar.py           
+
+import matplotlib.pyplot as plt
+from pymongo import MongoClient
+c = MongoClient("mongodb://localhost")
+db = c['bigdata2']
+gastos = db['gastos']
+v1=[]
+v2=[]
+for doc in gastos.aggregate([{"$group":{"_id":"$Nome Órgão Superior","valor":{"$sum":"$Valor"}}},{"$sort":{"valor":-1}}]):
+        v1.append(doc['_id'])
+        v2.append(doc['valor'])
+
+plt.bar(x=v1, height=v2)
+plt.show()
